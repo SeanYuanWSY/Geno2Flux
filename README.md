@@ -100,7 +100,10 @@ Geno2Flux does not assume a product, pathway, or strain. You must configure Step
 ```json
 {
   "localization_order": "skip",
-  "gapfilled_model": "path/to/model.xml"
+  "gapfilled_model": "path/to/model.xml",
+  "id_map": null,
+  "biomass": "<growth_reaction_id>",
+  "target_reaction": "<target_reaction_id>"
 }
 ```
 
@@ -229,7 +232,7 @@ bash run.sh metabolic --config /work/run.local.json --output /work/run-001
 Key outputs generated under `/work/run-001/<order>/`:
 
 - `localization_refinement_audit.json` — pulled compartment reactions (or default-compartment fallback receipt).
-- `target_model_<order>.xml` & `target_module_receipt.json` — mass- and charge-balanced target model.
+- `target_model_<order_slug>.xml` (e.g. `pre-gapfill/target_model_pre_gapfill.xml`, or `screening/target_model_screening.xml` in `skip` mode) & `target_module_receipt.json` — mounted target model (added internal reactions are elemental- and charge-balance checked by default).
 - `fseof/all_genes_fseof_essential_filtered.tsv` — non-essential overexpression candidates ranked by 10-step FSEOF flux slopes.
 - `paralog/paralog_family_rankings_essential_filtered.tsv` — homologous gene families clustered via DIAMOND self-alignment and ranked by aggregate FSEOF scores.
 - `knockout/single_gene_ko_essential_filtered.tsv` & `knockout/family_ko_essential_filtered.tsv` — single-gene and homologous-family joint knockout rankings excluding growth-essential genes.

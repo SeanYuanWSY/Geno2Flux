@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Setup
+        run: bash run.sh setup
+      - name: Run test suite
+        run: make test
+      - name: Check environment preflight JSON
+        run: |
+          out="$(mktemp)"
+          bash run.sh check-env --json > "$out" && rc=0 || rc=$?
+          # Exit 2 = overall INCOMPLETE: optional external tools/assets are
+          # absent on CI by design. Anything else is a real failure.
+          if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+          cat "$out"
+          uv run --frozen --extra test python -c '
+          import json, sys
+          checks = json.load(open(sys.argv[1]))["checks"]
+          assert checks["core"]["status"] == "READY", checks["core"]
+          assert checks["core"]["highs_milp"]["status"] == "ok", checks["core"]
+          assert checks["deeploc"]["status"] == "FALLBACK_AVAILABLE", checks["deeploc"]
+          assert checks["screening"]["status"] in {"READY", "BLOCKED"}, checks["screening"]
+          print({k: checks[k]["status"] for k in ("core", "screening", "deeploc")})
+          ' "$out"

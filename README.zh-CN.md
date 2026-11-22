@@ -21,7 +21,7 @@ Geno2Flux 基于你自己的基因组/蛋白质组数据，为真核（真菌）
 | 环境同步与测试（`make test`） | 是：uv 锁定环境 + 内置开源 HiGHS（`highspy`，覆盖 LP 与 MILP，无需 Gurobi） | 需先安装 [`uv`](https://docs.astral.sh/uv/)：它会自动管理 `bash run.sh setup` 所需的 Python 3.11–3.12 | Linux / macOS |
 | GFF3 标准化与蛋白质组准备（`predict-proteome --tool gff`、`prepare-inputs`） | 是：内置纯 Python CDS 拼接器，`gffread` 缺失时自动回退 | 从头注释时才需要 ANNEVO / Helixer / Tiberius / funannotate | Linux / macOS |
 | 基于已有 GEM 的靶点优先级排序（`target`/`fseof`/`paralogs`/`knockout`/`filter`） | 部分：靶点挂载、10 步 FSEOF、敲除筛选与生长必需性过滤内置（HiGHS LP） | 旁系同源聚类需 DIAMOND 2.1.10（或提供预计算的 `diamond_self_hits`） | Linux / macOS |
-| 分室细化（`localize`） | 部分：DeepLoc 缺失或未提供 `localization_tsv` 时自动降级，保留模板默认分室 | DeepLoc 2.0/2.1（DTU 个人学术许可，见第 4 节） | Linux / macOS |
+| 分室细化（`localize`） | 部分：未提供 `localization_tsv` 且 DeepLoc 缺失时自动降级，保留模板默认分室 | DeepLoc 2.0/2.1（DTU 个人学术许可，见第 4 节） | Linux / macOS |
 | 最小集合补洞（`gapfill`） | 求解器内置（HiGHS MILP） | NCBI BLAST+ 2.16.0（`makeblastdb`、`tblastn`；`fetch-resources --profile gapfill` 校验下载）。`--profile gapfill` 因包含 `screening` 也会顺带安装 DIAMOND，但 `gapfill` 本身不依赖 DIAMOND | 官方二进制覆盖 linux-x86_64、linux-aarch64、darwin-aarch64、darwin-x86_64 |
 | AlphaGEM 草图重建（从头重建步骤 1–3，`--profile paper`） | 否：不可裸跑 | 独立 AlphaGEM + DeepEC Python 环境、~13 GB Figshare 数据、ESM-1b 权重、eggNOG 数据库与契约匹配的 `fungi.dmnd`（见第 5 节） | 仅 Linux x86_64 |
 
@@ -95,7 +95,7 @@ Geno2Flux 不预设产物、途径或菌株。必须在 JSON 配置（或 `scrip
    }
    ```
 
-**已有 GEM 的快捷路径**：如果你已有整理好的 SBML/YAML/JSON GEM 和蛋白质组 FASTA，希望跳过 AlphaGEM 重建、定位与补洞直接做靶点排序，设置 `"localization_order": "skip"` 与 `"gapfilled_model": "path/to/model.xml"`（并配上对应的 `*_sha256` 或 `"allow_unverified_reuse": true`）。此时旁系同源聚类仅需 DIAMOND（或提供预计算的 `diamond_self_hits` 以完全绕过 DIAMOND）。
+**已有 GEM 的快捷路径**：如果你已有整理好的 SBML/YAML/JSON GEM 和蛋白质组 FASTA，希望跳过 AlphaGEM 重建、定位与补洞直接做靶点排序，设置 `"localization_order": "skip"`、`"gapfilled_model": "path/to/model.xml"`、`"id_map": null`（基于示例配置修改时避免引用缺失的 `inputs/id_map.tsv`），并把 `"biomass"` 与 `"target_reaction"`（或 `"target_module"`）改为你模型中的实际反应 ID（示例配置默认为 Yeast9 的 `r_4041` / `r_2056`），同时配上对应的 `*_sha256` 或 `"allow_unverified_reuse": true`。此时旁系同源聚类仅需 DIAMOND（或提供预计算的 `diamond_self_hits` 以完全绕过 DIAMOND）。
 
 **复用哈希校验门**：复用 `proteome_fasta`、`withgaps_model`、`gapfilled_model`、`localization_tsv`、`template_model` 或 `diamond_self_hits` 时，必须提供匹配的 `*_sha256` 字段（如 `proteome_sha256`、`gapfilled_model_sha256`、`diamond_self_hits_sha256` 等），除非显式设置 `"allow_unverified_reuse": true`。
 
@@ -226,7 +226,7 @@ bash run.sh metabolic --config /work/run.local.json --output /work/run-001
 `/work/run-001/<order>/` 下的关键产物：
 
 - `localization_refinement_audit.json` —— 被拉动的分室反应记录（或默认分室降级回执）。
-- `target_model_<order>.xml` 与 `target_module_receipt.json` —— 质量与电荷平衡的靶点模型。
+- `target_model_<order_slug>.xml`（例如 `pre-gapfill/target_model_pre_gapfill.xml`，或 `skip` 模式下的 `screening/target_model_screening.xml`）与 `target_module_receipt.json` —— 已挂载靶点模块的目标模型（新增内部反应默认通过元素与电荷平衡校验）。
 - `fseof/all_genes_fseof_essential_filtered.tsv` —— 按 10 步 FSEOF 通量斜率排序的非必需过表达候选。
 - `paralog/paralog_family_rankings_essential_filtered.tsv` —— 经 DIAMOND 自比对聚类、按聚合 FSEOF 得分排序的同源基因家族。
 - `knockout/single_gene_ko_essential_filtered.tsv` 与 `knockout/family_ko_essential_filtered.tsv` —— 排除生长必需基因后的单基因与同源家族联合敲除排序。

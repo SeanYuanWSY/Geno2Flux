@@ -29,7 +29,7 @@
   "essential_genes_tsv": null,
   "essential_ko_loss_threshold": 0.5,
   "proteome_fasta": "inputs/proteome.fasta",
-  "proteome_sha256": "",
+  "proteome_sha256": null,
   "id_map": "inputs/id_map.tsv",
   "target_input_contract": "inputs/target-input-contract.json",
   "localization_tsv": null,

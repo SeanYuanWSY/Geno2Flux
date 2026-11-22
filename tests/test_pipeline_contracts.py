@@ -834,3 +834,39 @@ def test_invalid_essential_config_fails_before_runtime(tmp_path, contents, thres
         with pytest.raises(pipeline.PipelineError):
             pipeline.run_pipeline(cfg, tmp_path / "out")
     prepare.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# Example config: _sha256 keys must be null (never "") so the shipped template
+# exercises the exploratory unverified-reuse path instead of a malformed-hash trap.
+# ---------------------------------------------------------------------------
+
+
+def test_example_config_supports_exploratory_unverified_reuse(tmp_path):
+    cfg = json.loads(
+        (Path(__file__).resolve().parents[1]
+         / "configs" / "unified_pipeline.example.json").read_text()
+    )
+    sha_keys = [k for k in cfg if k.endswith("_sha256")]
+    assert sha_keys, "expected _sha256 keys in the example config"
+    assert all(cfg[k] is None for k in sha_keys), {
+        k: cfg[k] for k in sha_keys if cfg[k] is not None
+    }
+
+    proteome = tmp_path / "proteome.fasta"
+    proteome.write_text(">seq1\nMKTA\n")
+
+    record = pipeline._gate_file(
+        proteome, cfg["proteome_sha256"],
+        "proteome_fasta", "proteome_sha256", allow_unverified=True,
+    )
+    assert record["identity"] == "unverified_opted_in"
+
+    assert cfg["allow_unverified_reuse"] is False
+    with pytest.raises(pipeline.PipelineError, match="allow_unverified_reuse=true") as exc:
+        pipeline._gate_file(
+            proteome, cfg["proteome_sha256"],
+            "proteome_fasta", "proteome_sha256",
+            allow_unverified=cfg["allow_unverified_reuse"],
+        )
+    assert "malformed expected" not in str(exc.value)
