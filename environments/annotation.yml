@@ -1,0 +1,8 @@
+name: annotation
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.8
+  - funannotate=1.8.17
+  - gffread=0.12.7

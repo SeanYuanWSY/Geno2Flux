@@ -1,0 +1,112 @@
+import cobra
+import json
+import pandas as pd
+from tqdm import tqdm
+import gc
+from pathlib import Path
+def str_chanege_for_gpr(old_gpr,oldgene,newgenes):
+    new_gpr=''
+    oldgprcell=old_gpr.split(' or ')
+    gprcell=[]
+    for a in oldgprcell:
+        if oldgene in a:
+            for genes in newgenes:
+                if 'and' in a:
+                    gprcell.append('('+a.replace(oldgene,genes).replace('(','').replace(')','')+')')
+                else:
+                    gprcell.append(a.replace(oldgene, genes).replace('(', '').replace(')', ''))
+        else:
+            if 'and' in a:
+                gprcell.append('('+a.replace('(','').replace(')','')+')')
+            else:
+                gprcell.append(a.replace('(', '').replace(')', ''))
+    new_gpr=' or '.join(list(set(gprcell)))
+    return new_gpr
+
+
+def get_complex(leftreactions,homodict):
+    complexdict={}
+    missing_subunits = []
+    for reaction in tqdm(leftreactions,'preparing other reactions'):
+        gprori=reaction.gene_reaction_rule
+        for gene in list(reaction.genes):
+            if gene.id in homodict:
+                gprori=str_chanege_for_gpr(gprori,gene.id,homodict[gene.id])
+            else:
+                gprori=str_chanege_for_gpr(gprori,gene.id,['None'])
+                missing_subunits.append(
+                    {"reaction_id": reaction.id, "gene_id": gene.id}
+                )
+        complexdict[reaction.id]=[gpr.replace('(','').replace(')','') for gpr in gprori.split(' or ')]
+    return complexdict, missing_subunits
+
+def modelbuild(refmodel,name,mincomp=0.8):
+    tarname = name
+    tarmod = cobra.io.load_yaml_model(f'working/{name}/model1{name}.yml')
+    print('imported target model')
+    # if refmodel=='yeast-GEM.xml' or refmodel=='Sco-GEM.xml' or refmodel=='Human-GEM.xml' or refmodel=='iSynCJ816.xml' or refmodel=='universal-GEM.xml':
+    ymod = cobra.io.read_sbml_model(f'models/{refmodel}')
+    # if refmodel=='iML1515.json':
+    #     ymod=cobra.io.load_json_model(f'models/{refmodel}')
+    tarmodel = cobra.Model(f'{name}-GEM')
+    homos = pd.read_excel(f'working/{name}/matrix_homolog{name}.xlsx')
+    addedreactions=[reaction.id for reaction in tarmod.reactions]
+    leftreactions=[]
+    complexdict={}
+    for reaction in tqdm(ymod.reactions,'finding left reactions'):
+        if reaction.id in addedreactions:
+            continue
+        if 'and' in reaction.gene_reaction_rule:
+            leftreactions.append(reaction)
+    homos.columns = ['number', 'refmodelgene', 'tarmodelgene']
+    homodict={}
+    for groups in homos.groupby('refmodelgene'):
+        homodict[groups[0]]=list(groups[1]['tarmodelgene'])#can change it to choose the best one to confirm the length of gpr
+    #add othergenes
+    for i in tqdm(range(len(tarmod.reactions))):
+        tarmodel.add_reactions([tarmod.reactions[i]])
+    del tarmod
+    complexdict, missing_subunits = get_complex(leftreactions,homodict)
+    complextruedict={}
+    for key,gpr in tqdm(complexdict.items(),'adding complex'):
+        complextruedict[key]=[]
+        for gprs in gpr:
+            if gprs.split(' and ').count('None')<=(1-mincomp)*len(gprs.split(' and '))+1e-5:
+                complextruedict[key].append('('+' and '.join([x for x in gprs.split(' and ') if x != 'None'])+')')
+        if complextruedict[key]==[]:
+            complextruedict.pop(key)
+    del gpr,key,complexdict
+    toaddreactions=[]
+    gc.collect()
+    for key in tqdm(complextruedict.keys(),'changing gpr'):
+        rxn1=ymod.reactions.get_by_id(key)
+        if len(complextruedict[key])>1:
+            rxn1.gene_reaction_rule=' or '.join(complextruedict[key])
+        else:
+            rxn1.gene_reaction_rule=complextruedict[key][0][1:-1]
+        toaddreactions.append(rxn1)
+    print(toaddreactions)
+    print(f'added complexes {len(toaddreactions)}')
+    tarmodel.add_reactions(toaddreactions)
+    tarmodel.objective=ymod.objective
+    fba = tarmodel.optimize()
+    cobra.io.save_yaml_model(tarmodel, f'working/{tarname}/model2{tarname}.yml')
+    audit_path = Path("working") / name / "draft_model_audit.json"
+    audit = (
+        json.loads(audit_path.read_text(encoding="utf-8"))
+        if audit_path.is_file()
+        else {}
+    )
+    audit.update(
+        {
+            "complex_candidate_reaction_count": len(leftreactions),
+            "complex_retained_reaction_count": len(toaddreactions),
+            "missing_complex_subunits": missing_subunits,
+            "missing_complex_subunit_count": len(missing_subunits),
+            "model2_reaction_count": len(tarmodel.reactions),
+        }
+    )
+    audit_path.write_text(
+        json.dumps(audit, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )

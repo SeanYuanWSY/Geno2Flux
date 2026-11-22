@@ -1,0 +1,157 @@
+import pandas as pd
+from rdflib import Graph, Namespace, URIRef
+import cobra
+import json
+import os
+from pathlib import Path
+
+
+def calculate_score(row):
+    score=0
+    if pd.notnull(row['anno_B']):
+        score+=0.3
+    if pd.notnull(row['anno_A']):
+        score+=0.2
+    if pd.notnull(row['anno_C']):
+        score+=0.2
+    if pd.notnull(row['anno_D']):
+        score+=0.1
+    return round(score, 1)
+
+
+def findtargetreaction(g, ec):
+    rhea=[]
+    rh = Namespace("http://rdf.rhea-db.org/")
+    rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+    reaction_query = f"""
+       SELECT DISTINCT ?x ?reaction
+       WHERE {{
+         ?x rdfs:subClassOf rh:Reaction .
+         ?x rh:ec <http://purl.uniprot.org/enzyme/{ec}> .
+       }}
+       LIMIT 100
+       """
+    reactions = g.query(reaction_query)
+    rhea=[str(row.x).split("/")[-1] for row in reactions]
+    return rhea
+
+
+def map_eggnog_reactions(egg, keggdict):
+    rows = []
+    unmapped = []
+    for gene_index in range(len(egg.index)):
+        ec_field = egg.iat[gene_index, 3]
+        if ec_field == '-':
+            continue
+        gene_id = str(egg.iat[gene_index, 1])
+        for ec in str(ec_field).split(','):
+            try:
+                rhea_id = keggdict[ec]
+            except KeyError:
+                unmapped.append({"gene": gene_id, "ec": ec})
+                continue
+            rows.append(
+                {
+                    "reaction": gene_id,
+                    "rhea": str(rhea_id),
+                    "anno": "eggnog_mapper",
+                }
+            )
+    return (
+        pd.DataFrame(rows, columns=["reaction", "rhea", "anno"]),
+        unmapped,
+    )
+
+
+def nonhome(name,clean_use,deepec_use,plm_use=True,ecgraph=False):
+    g=Graph()
+    g.parse('rhea/rhea.rdf', format='xml')
+    kegg2rhea = pd.read_csv('data_available/rhea2kegg_reaction.tsv', sep='\t')
+    keggdict = kegg2rhea.set_index('ID')['MASTER_ID'].to_dict()
+    egg = pd.read_excel(f'working/{name}/eggec2{name}.xlsx')
+    eggec, unmapped_eggnog = map_eggnog_reactions(egg, keggdict)
+
+    resultec=eggec
+    cleanec = pd.DataFrame()
+    cleanecrhea = pd.DataFrame(data=None,columns=['reaction','rhea','anno'])
+    deepec = pd.DataFrame()
+    deepecrhea = pd.DataFrame(data=None,columns=['reaction','rhea','anno'])
+    plmrhea = pd.DataFrame(data=None,columns=['reaction','rhea','anno'])
+    filter_num=0.1
+    if clean_use:
+        filter_num=0.4
+        cleanecs = pd.DataFrame()
+        clean = pd.read_csv(f'working/{name}/{name}_homoleft_maxsep.csv', sep='\t', header=None,
+                            names=['clean'])
+        for i in range(len(clean.index)):
+            cleanecs = pd.concat([cleanecs, pd.DataFrame(
+                {'reaction': clean.iat[i, 0].split('|')[1], 'ec': clean.iat[i, 0][clean.iat[i, 0].find('EC:'):]},
+                index=[1])])
+        for genes in range(len(cleanecs.index)):
+            if cleanecs.iat[genes, 1] == '-':
+                continue
+            for ec in cleanecs.iat[genes, 1].split(','):
+                if float(ec.split('/')[1]) <=0.7:
+                    continue
+                cleanec = pd.concat([cleanec,
+                                     pd.DataFrame({'reaction': cleanecs.iat[genes, 0], 'ec': ec.split('/')[0][3:]},
+                                                  index=[1])])
+        for i in range(len(cleanec.index)):
+            for rheas in findtargetreaction(g,cleanec.iat[i,1]):
+                cleanecrhea = pd.concat([cleanecrhea,
+                                     pd.DataFrame({'reaction': cleanec.iat[i, 0], 'rhea':str(rheas) ,'anno':'clean'},
+                                                  index=[1])])
+    if deepec_use:
+        filter_num=0.4
+        path=os.path.join(os.getcwd(),'working',f'{name}',f'{name}_deepec_result','DeepECv2_result.txt')
+        deepec=pd.read_csv(path,sep='\t')
+        deepec['sequence_ID']=deepec['sequence_ID'].apply(lambda x: x.split('|')[1])
+        deepec.fillna('',inplace=True)
+        for genes in range(len(deepec.index)):
+            if deepec.iat[genes, 1]=='':
+                continue
+            for ec in str(deepec.iat[genes, 1]).split(';'):
+                if ec.endswith('-'):
+                    continue
+                for rheas in findtargetreaction(g,ec[3:]):
+                    deepecrhea = pd.concat([deepecrhea,
+                                     pd.DataFrame({'reaction': deepec.iat[genes, 0], 'rhea': str(rheas),'anno':'deepec'},
+                                                  index=[1])])
+    if plm_use:
+        filter_num = 0.4
+        plmresult=pd.read_excel(f'working/{name}/{name}_rheaid_plmsearch.xlsx')
+        plmrhea['reaction']=plmresult['Query'].apply(lambda x:x.split('|')[1])
+        plmrhea['rhea']=plmresult['Rhea_id']
+        plmrhea['anno']='plmsearch'
+        plmrhea=plmrhea.drop_duplicates()
+        plmrhea['rhea']=plmrhea['rhea'].apply(lambda x:str(x))
+        #for genes in range(len(plmresult.index)):
+            #plmrhea = pd.concat([plmrhea,pd.DataFrame({'reaction':plmresult.iat[genes, 1], 'rhea':plmresult.iat[genes,2] ,'anno':'plm'},index=[1])])
+    if ecgraph:
+        filter_num=0.5
+        ecgraphresult=pd.read_excel(f'working/{name}/{name}_ecgraphsearch.xlsx')
+    filter_num=filter_num-0.02
+    merged = pd.merge(cleanecrhea, eggec, how='outer', on=['reaction', 'rhea'], suffixes=('_A', '_B'))
+    deepecrhea = deepecrhea.add_suffix('_C')
+    deepecrhea.rename(columns={'reaction_C': 'reaction', 'rhea_C': 'rhea'}, inplace=True)
+    merged = pd.merge(merged, deepecrhea, how='outer', on=['reaction', 'rhea'])
+    plmrhea=plmrhea.add_suffix('_D')
+    plmrhea.rename(columns={'reaction_D': 'reaction','rhea_D':'rhea'}, inplace=True)
+    merged=pd.merge(merged, plmrhea, how='outer', on=['reaction', 'rhea'])
+    merged['final_score'] = merged.apply(calculate_score, axis=1)
+    merged.to_excel(f'working/{name}/{name}multiple_score.xlsx', index=False)
+    audit = {
+        "eggnog_input_rows": int(len(egg.index)),
+        "eggnog_candidate_pair_count": (
+            int(len(eggec.index)) + len(unmapped_eggnog)
+        ),
+        "eggnog_rhea_mapped_pairs": int(len(eggec.index)),
+        "eggnog_unmapped_pairs": unmapped_eggnog,
+        "eggnog_unmapped_pair_count": len(unmapped_eggnog),
+        "merged_annotation_pair_count": int(len(merged.index)),
+    }
+    audit_path = Path("working") / name / "annotation_merge_audit.json"
+    audit_path.write_text(
+        json.dumps(audit, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )

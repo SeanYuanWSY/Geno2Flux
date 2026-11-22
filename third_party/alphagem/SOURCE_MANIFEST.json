@@ -1,0 +1,598 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/hongzhonglu/AlphaGEM",
+  "source_origin": "vendored-alphagem-snapshot",
+  "source_provenance_note": "Derived from the upstream AlphaGEM repository (https://github.com/hongzhonglu/AlphaGEM) via an intermediate reproduction snapshot pinned at source_commit; source_commit identifies the frozen snapshot, not an upstream GitHub commit. Exact bundled bytes are pinned by the per-file SHA-256 entries below.",
+  "source_commit": "788a00b21ff1e516065166e2577dd8c499ef872d",
+  "files": [
+    {
+      "path": "AlphaGEM.py",
+      "upstream_path": "AlphaGEM.py",
+      "sha256": "f0de48d4e5c509554100ac3e2625c11e5c954989201781e0453dab546f745b89",
+      "bytes": 12288,
+      "local_patch_set": "geno2flux-release-hygiene-v1"
+    },
+    {
+      "path": "AlphaGEM.yml",
+      "upstream_path": "AlphaGEM.yml",
+      "sha256": "dce801a7d94da06109dc8c140240a53b36c96c1085487be739de5ca1186b1414",
+      "bytes": 7847
+    },
+    {
+      "path": "LICENSE",
+      "upstream_path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149
+    },
+    {
+      "path": "UPSTREAM_README.md",
+      "upstream_path": "README.md",
+      "sha256": "b2ef77feb846ae45922ffcfadf800afce6a362a60f40dd51bed3d685bbd83066",
+      "bytes": 12779
+    },
+    {
+      "path": "deepecenvironment.yml",
+      "upstream_path": "deepecenvironment.yml",
+      "sha256": "4bbc61c8a2fa337e4d2fedfd87e919c1da1c3093b72c13e459226d5f4f32ec09",
+      "bytes": 2281
+    },
+    {
+      "path": "models/reaction_pool_final.json",
+      "upstream_path": "models/reaction_pool_final.json",
+      "sha256": "fbe471dd7d76e947aa2a31af7050b3020a179a3ee64bcd89e21b7a7fe894c611",
+      "bytes": 9024108
+    },
+    {
+      "path": "models/yeast-GEM.xml",
+      "upstream_path": "models/yeast-GEM.xml",
+      "sha256": "431f378a13b5891ba7c25c3ddf51330c7b562a948813dabcd5aacd7532cdefc1",
+      "bytes": 11711055
+    },
+    {
+      "path": "setup.py",
+      "upstream_path": "setup.py",
+      "sha256": "4f22905987776e4ccfb9ab9096e6f990aa71328b898940fdf070ef90434d7474",
+      "bytes": 1442
+    },
+    {
+      "path": "setup.sh",
+      "upstream_path": "setup.sh",
+      "sha256": "afe950ddd7dc6637a271bd506a35779d510096de839ac3b5e1843bfb48586dcd",
+      "bytes": 4984
+    },
+    {
+      "path": "src/C_sourcegapseqmodel.py",
+      "upstream_path": "src/C_sourcegapseqmodel.py",
+      "sha256": "ac6c8a3974a41499ece89721deef460165785b3cefc4b63c7641e7308afe29dd",
+      "bytes": 3033
+    },
+    {
+      "path": "src/STRUCT_get.py",
+      "upstream_path": "src/STRUCT_get.py",
+      "sha256": "c3e7ccde541e0388be780408dc515a5dc8645b5da9d3e84e8736d33c3c54a4b6",
+      "bytes": 4072
+    },
+    {
+      "path": "src/US_align_choose.py",
+      "upstream_path": "src/US_align_choose.py",
+      "sha256": "6b43935865fac42ae51e2f457f519cf98186f0642686e28246184d22c3c6ca59",
+      "bytes": 1529
+    },
+    {
+      "path": "src/US_align_knock1.py",
+      "upstream_path": "src/US_align_knock1.py",
+      "sha256": "fb01034fddd707050a23d1df38bdb52333b6c64ecaee62e7c4020a04ff285f63",
+      "bytes": 7429
+    },
+    {
+      "path": "src/__init__.py",
+      "upstream_path": "src/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "src/add_nonhomo_reaction_score.py",
+      "upstream_path": "src/add_nonhomo_reaction_score.py",
+      "sha256": "174611251cf2bdf4d9bde4215c7ae6b721719557b2d12034726a49ca62b8a097",
+      "bytes": 9193
+    },
+    {
+      "path": "src/add_reactions_based_pool.py",
+      "upstream_path": "src/add_reactions_based_pool.py",
+      "sha256": "1e556eed849026efd9f8f76209d1cf8efa39f4f9e9cc481554ccd90ff2f3edb0",
+      "bytes": 44174,
+      "local_patch_set": "geno2flux-highs-gapfill-backend-v1"
+    },
+    {
+      "path": "src/add_reactions_based_pool_old_to_delete.py",
+      "upstream_path": "src/add_reactions_based_pool_old_to_delete.py",
+      "sha256": "c96606c8c4fa7ba817d413611ba7d559a244e3e1f20d3b13dcd60da2554c11d1",
+      "bytes": 5640
+    },
+    {
+      "path": "src/added_reactions_curation.py",
+      "upstream_path": "src/added_reactions_curation.py",
+      "sha256": "42433d71631c78e32ae6a4aed2fdb82dfa5369bd3a26036f3064e479c810b87f",
+      "bytes": 713
+    },
+    {
+      "path": "src/align2.py",
+      "upstream_path": "src/align2.py",
+      "sha256": "bfae7787cb79653c8f25ca1a8e57a74642a9d3b75ab322713638a3282bfaed67",
+      "bytes": 533
+    },
+    {
+      "path": "src/classify_reactions.py",
+      "upstream_path": "src/classify_reactions.py",
+      "sha256": "2f9de406c36f428682fb483c7a6f5aab0fbbc14de7e4f511e66cebbc95132312",
+      "bytes": 222
+    },
+    {
+      "path": "src/clean_esm_extract_wrapper.py",
+      "upstream_path": "src/clean_esm_extract_wrapper.py",
+      "sha256": "f8728032bc5b90a1c2d985cf60db07eaf456a3f87e87c9d08311aa1fc3573fc5",
+      "bytes": 964
+    },
+    {
+      "path": "src/click_2nd.py",
+      "upstream_path": "src/click_2nd.py",
+      "sha256": "964c4e2c7175646c9031cf7c0549bef7a26cc3a001587f7d94bdbaad391e5793",
+      "bytes": 534
+    },
+    {
+      "path": "src/click_first.py",
+      "upstream_path": "src/click_first.py",
+      "sha256": "e8b6c6a8b8f574125c0a3fd4e145e1541ff3351f57b61d87e584d1002efbae34",
+      "bytes": 636
+    },
+    {
+      "path": "src/compound.py",
+      "upstream_path": "src/compound.py",
+      "sha256": "e0de66d31d4af627c84f67d2958f9b9954cf97a31e3c0b8aa8298df2c45dfb20",
+      "bytes": 614
+    },
+    {
+      "path": "src/config.py",
+      "upstream_path": "src/config.py",
+      "sha256": "d0cd8d194a2b70210805ad588a2588ff9379d6e5465ed9140c754c75b56e1a27",
+      "bytes": 228
+    },
+    {
+      "path": "src/cov_filter.py",
+      "upstream_path": "src/cov_filter.py",
+      "sha256": "38155b8a055f59c8203fe9fc18bdedda977a404871c6dbe4ba71e900ce9ee1d2",
+      "bytes": 13969
+    },
+    {
+      "path": "src/dl_module.py",
+      "upstream_path": "src/dl_module.py",
+      "sha256": "559fcf0568fdfb52162f5b53994bb9341ea206628a1a1534946d3762e94b822d",
+      "bytes": 2439
+    },
+    {
+      "path": "src/dl_part.py",
+      "upstream_path": "src/dl_part.py",
+      "sha256": "f9e621a734aacbab66dfa37a6b4ac86c2a2700060e097e4ba7dd1392a2870a7d",
+      "bytes": 1983
+    },
+    {
+      "path": "src/fasta_handle.py",
+      "upstream_path": "src/fasta_handle.py",
+      "sha256": "1f5912e25b3a778eb28214d193d08b679e28806365a7f7bb4a567cb094a23b6b",
+      "bytes": 2752
+    },
+    {
+      "path": "src/filter_by_prottrans.py",
+      "upstream_path": "src/filter_by_prottrans.py",
+      "sha256": "30c81e1dbbe1061d121014927200d7eadd00399fe8661580bcf8abb19f572461",
+      "bytes": 16224
+    },
+    {
+      "path": "src/filter_module.py",
+      "upstream_path": "src/filter_module.py",
+      "sha256": "ef6aea3add4a69475dc81b4b280ee8732c2c8788a217e6e11b8a8873fde468ad",
+      "bytes": 2727
+    },
+    {
+      "path": "src/findrefnames.py",
+      "upstream_path": "src/findrefnames.py",
+      "sha256": "b12b2c3a7527268364a976d4ffaddeaba546ec119feed7721f38740e765cba65",
+      "bytes": 716
+    },
+    {
+      "path": "src/foldseek_choose.py",
+      "upstream_path": "src/foldseek_choose.py",
+      "sha256": "6403c567729960d80af851c5fb4cb65e718751ae5c147f0e8cc9ed6d5628b027",
+      "bytes": 3672
+    },
+    {
+      "path": "src/foldseek_choose2.py",
+      "upstream_path": "src/foldseek_choose2.py",
+      "sha256": "da2da87dee05c81b0d08dab5a827b64ba774bf172d1f3c0868a9e2723e004859",
+      "bytes": 7256
+    },
+    {
+      "path": "src/foldseek_knock1.py",
+      "upstream_path": "src/foldseek_knock1.py",
+      "sha256": "f79ff74a388056f7a37270220e392f99c870b4bf2f53eca2c28510e8f16e25ee",
+      "bytes": 9623
+    },
+    {
+      "path": "src/foldseekcluster.py",
+      "upstream_path": "src/foldseekcluster.py",
+      "sha256": "289206b7773c75197adbc38ba5ce05dc6a79344226fc20d3fa0fc6fc319a8e53",
+      "bytes": 2711
+    },
+    {
+      "path": "src/gapfilling.py",
+      "upstream_path": "src/gapfilling.py",
+      "sha256": "2361c7774b1f2ebf270236bafe562da0f85e063787a5c7bb1b8d4da5867693e1",
+      "bytes": 66254,
+      "local_patch_set": "geno2flux-highs-gapfill-backend-v1"
+    },
+    {
+      "path": "src/gapfilling_universal.py",
+      "upstream_path": "src/gapfilling_universal.py",
+      "sha256": "9ae28d433a526f7a54f189ef92f0b01b9dcfa76b9da80f812e9a8a4f45e3964c",
+      "bytes": 11142
+    },
+    {
+      "path": "src/general_reactions_to_spe.py",
+      "upstream_path": "src/general_reactions_to_spe.py",
+      "sha256": "acd63a8550bd93427e692d8042fcabc14bf2a4461436886c586deabfa1f155ac",
+      "bytes": 2423
+    },
+    {
+      "path": "src/generate_list.py",
+      "upstream_path": "src/generate_list.py",
+      "sha256": "86b5bbbd29ecf2b237945360e4a9f65a785c4edab75663e6038fbb5206f52237",
+      "bytes": 8829
+    },
+    {
+      "path": "src/generate_medium.py",
+      "upstream_path": "src/generate_medium.py",
+      "sha256": "cc63bee28dd5e4a0f4af3f21eeaee32381979fc3f37a5139937d0524cca25218",
+      "bytes": 3278
+    },
+    {
+      "path": "src/generate_new_pool/__init__.py",
+      "upstream_path": "src/generate_new_pool/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "src/generate_new_pool/build_ec_to_reaction_map.py",
+      "upstream_path": "src/generate_new_pool/build_ec_to_reaction_map.py",
+      "sha256": "ee5c7e5e91eaf34fbb94fdd6ecb582f6f7263bdb3b3ea247c7e0641bcfc55f81",
+      "bytes": 1904
+    },
+    {
+      "path": "src/generate_new_pool/build_enzymatic_reactions_from_pkls.py",
+      "upstream_path": "src/generate_new_pool/build_enzymatic_reactions_from_pkls.py",
+      "sha256": "dc38f2ccdcc7aea212dcc9db5d6ae77c93765801f68fbd0d135a79d496466920",
+      "bytes": 11272
+    },
+    {
+      "path": "src/generate_new_pool/dump_mnxr_stoich.py",
+      "upstream_path": "src/generate_new_pool/dump_mnxr_stoich.py",
+      "sha256": "2aba0569cf3afadc49e4a7566245ffefa8de17fb8774e9f9287f2e9429636a04",
+      "bytes": 7591
+    },
+    {
+      "path": "src/generate_new_pool/export_chems_to_sbml.py",
+      "upstream_path": "src/generate_new_pool/export_chems_to_sbml.py",
+      "sha256": "11a15c9a40562f648796c73a127f66cb65ab5e703b409683f35411d0c6cfd76d",
+      "bytes": 2390
+    },
+    {
+      "path": "src/generate_new_pool/export_smiles_xlsx.py",
+      "upstream_path": "src/generate_new_pool/export_smiles_xlsx.py",
+      "sha256": "df1a9d00061a063c4365ebfe784dc6feb8a19f30a34ebf69668c2ca5ac427bca",
+      "bytes": 1002
+    },
+    {
+      "path": "src/generate_new_pool/generate_poolccc.py",
+      "upstream_path": "src/generate_new_pool/generate_poolccc.py",
+      "sha256": "86c5904bb7f68889f409266c6a60ae29884c8997606ec8d429494469f128a90f",
+      "bytes": 12279
+    },
+    {
+      "path": "src/generate_new_pool/generate_reaction_pool_new.py",
+      "upstream_path": "src/generate_new_pool/generate_reaction_pool_new.py",
+      "sha256": "dd23be96560aeda7dde9df77295be4a0d610bb1ab1fdb5216a4b58d4ac20d275",
+      "bytes": 1306
+    },
+    {
+      "path": "src/generate_new_pool/reac_prop_to_dict.py",
+      "upstream_path": "src/generate_new_pool/reac_prop_to_dict.py",
+      "sha256": "d35e0d905932158e865ca9a6dd5276ec36f9775c2ca454f38cbeebbdb7965283",
+      "bytes": 2361
+    },
+    {
+      "path": "src/generate_new_pool/read_mnxref_chems.py",
+      "upstream_path": "src/generate_new_pool/read_mnxref_chems.py",
+      "sha256": "273f4f870f4ebdefcae6ed9c0dc284d9d079b3971124b00c0d83a4d53cc2768f",
+      "bytes": 8175
+    },
+    {
+      "path": "src/generate_new_pool/read_mnxref_reacs.py",
+      "upstream_path": "src/generate_new_pool/read_mnxref_reacs.py",
+      "sha256": "5757291c2502d538a2404fd3545fd6a1e089752e68a4a794fb8bf87ef385ac5a",
+      "bytes": 35230
+    },
+    {
+      "path": "src/generate_new_pool/read_reaction_reversibility.py",
+      "upstream_path": "src/generate_new_pool/read_reaction_reversibility.py",
+      "sha256": "4fe0455a7c5499f5911e7707694b33f89418dd7fed12d5f0158a578235c838e7",
+      "bytes": 4986
+    },
+    {
+      "path": "src/generate_new_pool/tsv_reac_prop_to_dict.py",
+      "upstream_path": "src/generate_new_pool/tsv_reac_prop_to_dict.py",
+      "sha256": "fe3389595208b8855db026730cc34f3899829924660faef5cb5e96237190c4c8",
+      "bytes": 2704
+    },
+    {
+      "path": "src/get_date_for_reactions_and_compound.py",
+      "upstream_path": "src/get_date_for_reactions_and_compound.py",
+      "sha256": "d1d5c5a3bfde93902f1a779d35b294f577e9e04ff31981e7360046a89f9ec93b",
+      "bytes": 1156
+    },
+    {
+      "path": "src/gunzip.py",
+      "upstream_path": "src/gunzip.py",
+      "sha256": "b5dcd9601962f14b8088766db4cdc41f8271f0170709c2bc24e219569cf74ffc",
+      "bytes": 444
+    },
+    {
+      "path": "src/homolog_concat2.py",
+      "upstream_path": "src/homolog_concat2.py",
+      "sha256": "a92f2f59ffa686b5249167f61e238e8e2815a7601bbfb7a564540d896d3f6885",
+      "bytes": 1181
+    },
+    {
+      "path": "src/kegg_find.py",
+      "upstream_path": "src/kegg_find.py",
+      "sha256": "1511f67055c14fd8e9e9d3d8f5eba21e2703648a9eb46e9c7e5aecb1aab1f2fa",
+      "bytes": 2275
+    },
+    {
+      "path": "src/main.py",
+      "upstream_path": "src/main.py",
+      "sha256": "0e52e5e037ab9626af3cba86f0956a76a2191a740996b6a4c2bb63efd508da77",
+      "bytes": 5287
+    },
+    {
+      "path": "src/main3.py",
+      "upstream_path": "src/main3.py",
+      "sha256": "66f4594c2b50ec35df99c5cd96289a1de5646861dfac32283748ea21975f80d3",
+      "bytes": 2436
+    },
+    {
+      "path": "src/mkdir.py",
+      "upstream_path": "src/mkdir.py",
+      "sha256": "9793105f8e7dab8dfa77ccebe7ddb1e2e8e6a50715650217c5159d9d6871015f",
+      "bytes": 780
+    },
+    {
+      "path": "src/model_build1.py",
+      "upstream_path": "src/model_build1.py",
+      "sha256": "715981eeeff6ad68ac6e395f16b04b013058674004ea8335bbfd783c6091c0ad",
+      "bytes": 6598
+    },
+    {
+      "path": "src/model_build1_older.py",
+      "upstream_path": "src/model_build1_older.py",
+      "sha256": "2f233bde639a529c1bb45696b387844b59f5401a854bb6a71c5dd7da96edc69d",
+      "bytes": 8337
+    },
+    {
+      "path": "src/model_build2.py",
+      "upstream_path": "src/model_build2.py",
+      "sha256": "387c1c067904693ad3a394319fbdb838e9c3d1074c2807e04385511eba3fa8b8",
+      "bytes": 4690
+    },
+    {
+      "path": "src/model_curation.py",
+      "upstream_path": "src/model_curation.py",
+      "sha256": "c0fe2703f186f45a1aac4d3b1dad8ff3c5c321e4a732e1bf66f4be20a7a6830f",
+      "bytes": 481
+    },
+    {
+      "path": "src/model_reaction.py",
+      "upstream_path": "src/model_reaction.py",
+      "sha256": "cd4766884f1415257c65ad60b9d407bafdf144e98f417932bbf88da7338b249c",
+      "bytes": 10828
+    },
+    {
+      "path": "src/model_reaction_old.py",
+      "upstream_path": "src/model_reaction_old.py",
+      "sha256": "57f814bab227637eb0dd66355852b907d6751bf0516214fec14fb7d8e1de21c2",
+      "bytes": 10255
+    },
+    {
+      "path": "src/model_transpoter_found.py",
+      "upstream_path": "src/model_transpoter_found.py",
+      "sha256": "38401c9b19ce39d7220582c05214c0d1354f40267f09ccb649e3420c281e9055",
+      "bytes": 1791
+    },
+    {
+      "path": "src/multiple_annotition_for_nonhomogene.py",
+      "upstream_path": "src/multiple_annotition_for_nonhomogene.py",
+      "sha256": "590dc8d4a1081388df91b62830e09e49429b12b37d6da798278a58931c1659d7",
+      "bytes": 6616
+    },
+    {
+      "path": "src/namespacedict.py",
+      "upstream_path": "src/namespacedict.py",
+      "sha256": "7f59b14a021f420d0d062972d3d6c2e59d5c79aa53b9d32aa840d67172b294c8",
+      "bytes": 2348
+    },
+    {
+      "path": "src/newmodelreaction.py",
+      "upstream_path": "src/newmodelreaction.py",
+      "sha256": "365d7bb5a6a178b13b3769d07260a2984acf15d1b1477d5bbd3ce01e0cf50851",
+      "bytes": 6721
+    },
+    {
+      "path": "src/nonhomoecinfer.py",
+      "upstream_path": "src/nonhomoecinfer.py",
+      "sha256": "8afc7441f872f42c349c76266cd25ef851c5dd80dcb5fdbd211b24035c8e88ab",
+      "bytes": 1567
+    },
+    {
+      "path": "src/nonhomoecinferegg.py",
+      "upstream_path": "src/nonhomoecinferegg.py",
+      "sha256": "c70d927d3236a911e2fd080d14b12ce566375b316b47f1a6eb1e975bc0479b45",
+      "bytes": 731
+    },
+    {
+      "path": "src/nonhomogene_anno_score_from_eggandclean.py",
+      "upstream_path": "src/nonhomogene_anno_score_from_eggandclean.py",
+      "sha256": "33e7c2022e2ba05bb91a9817c771f4c65afb365b4db22e33f8600351425b8d0f",
+      "bytes": 3551
+    },
+    {
+      "path": "src/optlang_highs_interface.py",
+      "upstream_path": null,
+      "sha256": "b3034b7ed14a9abb18056b567f0c26395e7b2d361a0bf3ff2a133e1d42af6800",
+      "bytes": 34457,
+      "local_patch_set": "geno2flux-continuous-lp-precision-v1"
+    },
+    {
+      "path": "src/orthofinder_datahandle.py",
+      "upstream_path": "src/orthofinder_datahandle.py",
+      "sha256": "3c634c57321fc95f607ae72999a751819d2410a34b99bc1f286275f330955f04",
+      "bytes": 2771
+    },
+    {
+      "path": "src/paper_tool_contracts.py",
+      "upstream_path": "src/paper_tool_contracts.py",
+      "sha256": "5ddda5cdc9849bf3fc63f0af12eea59cb85122365ec18009c14821fd9e4b593f",
+      "bytes": 12048,
+      "local_patch_set": "geno2flux-release-hygiene-v1"
+    },
+    {
+      "path": "src/pipeline_config.py",
+      "upstream_path": "src/pipeline_config.py",
+      "sha256": "a625e773c8a36fbb0a5a2a09b77f59c54418b5eaf79dd2a53fea2939155ca99c",
+      "bytes": 9273
+    },
+    {
+      "path": "src/pipeline_contracts.py",
+      "upstream_path": "src/pipeline_contracts.py",
+      "sha256": "b09d5a793b7c801d0738338dc86804f981c3e869d8bee2807afa3f03e20b287d",
+      "bytes": 68139,
+      "local_patch_set": "geno2flux-highs-gapfill-backend-v1"
+    },
+    {
+      "path": "src/pipeline_runner.py",
+      "upstream_path": "src/pipeline_runner.py",
+      "sha256": "1b35a5ac29a240022fc018b2be06e500790ae0a05174c0867321f29c8ca9a0af",
+      "bytes": 238771,
+      "local_patch_set": "geno2flux-release-hygiene-v1"
+    },
+    {
+      "path": "src/plddt_find.py",
+      "upstream_path": "src/plddt_find.py",
+      "sha256": "9d929afdcdd974feb0ace200e019f946bedb0890afda8fda9354fb52afa8fe61",
+      "bytes": 405
+    },
+    {
+      "path": "src/plmsearch.py",
+      "upstream_path": "src/plmsearch.py",
+      "sha256": "53d487b41090bd0399bdecf58a930f7aa1ecf8f52b50673247eb591e9a0324b9",
+      "bytes": 10642
+    },
+    {
+      "path": "src/plmsearch_embedding.py",
+      "upstream_path": "src/plmsearch_embedding.py",
+      "sha256": "d5c286a8fd6bd5425f1cd74082b059986666b0ad896bbcd87e4421953aebf0f1",
+      "bytes": 7192
+    },
+    {
+      "path": "src/refmodel_curation.py",
+      "upstream_path": "src/refmodel_curation.py",
+      "sha256": "bf6725cc6a4184ac13fb65b17f044bf696d46e0bab9d94d3256687f2c76f713b",
+      "bytes": 3593
+    },
+    {
+      "path": "src/ss_predict_choose.py",
+      "upstream_path": "src/ss_predict_choose.py",
+      "sha256": "0db832a3c6f114591def5efdcea0994c68cc82addfc643b22a7071e7230e9bb5",
+      "bytes": 3181
+    },
+    {
+      "path": "src/syn.py",
+      "upstream_path": "src/syn.py",
+      "sha256": "f39f1d6b330a4a866d935792fddbcad4b193db323266037309a60d76b618b1f6",
+      "bytes": 639
+    },
+    {
+      "path": "src/use_clean.py",
+      "upstream_path": "src/use_clean.py",
+      "sha256": "cfc67232db9fc88e48c8da09c9a20d820cdd639ea903727191c90e87d2811cc0",
+      "bytes": 25940
+    },
+    {
+      "path": "src/use_deepectransformer.py",
+      "upstream_path": "src/use_deepectransformer.py",
+      "sha256": "73c7e4497c14f658360d4c99a66697f65cada49f809b39d9926bdd62aea936c1",
+      "bytes": 5066
+    },
+    {
+      "path": "src/use_ecrecer.py",
+      "upstream_path": "src/use_ecrecer.py",
+      "sha256": "00c338b22fa25930b214e9ab6d23304a3022e02cb07ffe6c16ca412ec8609e1b",
+      "bytes": 884
+    },
+    {
+      "path": "src/use_eggnog.py",
+      "upstream_path": "src/use_eggnog.py",
+      "sha256": "48d36cbcdfa731e3f6909678a55e29e521013d7ed2f5e298abf346f21c9c2a4b",
+      "bytes": 3207
+    },
+    {
+      "path": "src/use_graphec.py",
+      "upstream_path": "src/use_graphec.py",
+      "sha256": "c8f84550d40caddae503b04ebd1728498b7c1c33d9f7f857e3c301ed319625d3",
+      "bytes": 564
+    },
+    {
+      "path": "src/use_rhea.py",
+      "upstream_path": "src/use_rhea.py",
+      "sha256": "7f3449935771afa8d81de740ef97189fbf7f372368fbbeb62f3bb073550f1363",
+      "bytes": 1852
+    }
+  ],
+  "local_patch_set": {
+    "id": "geno2flux-highs-gapfill-backend-v1",
+    "base_source_commit": "788a00b21ff1e516065166e2577dd8c499ef872d",
+    "base_patch_set": "geno2flux-reaction-pool-policy-v4",
+    "modified_paths": [
+      "AlphaGEM.py",
+      "src/add_reactions_based_pool.py",
+      "src/gapfilling.py",
+      "src/optlang_highs_interface.py",
+      "src/pipeline_contracts.py",
+      "src/pipeline_runner.py"
+    ],
+    "purpose": "Geno2Flux reaction-pool audit/policies plus an optlang-compatible HiGHS solver backend (scipy.optimize.milp) for the gapfill stage, the checkpoint import/continuation path (--from-checkpoint), the audited gapfill tblastn hit tie-break switch (--gapfill-tie-break), and the gapfill unmapped-hit policy switch (--gapfill-unmapped-hit-policy)"
+  },
+  "subsequent_patch_sets": [
+    {
+      "id": "geno2flux-continuous-lp-precision-v1",
+      "modified_paths": ["src/optlang_highs_interface.py"],
+      "purpose": "Record the already-committed explicit continuous linprog backend and actual tolerance forwarding; default and integer solves retain the existing milp backend. This manifest correction does not change source bytes or any scientific problem."
+    },
+    {
+      "id": "geno2flux-release-hygiene-v1",
+      "modified_paths": [
+        "AlphaGEM.py",
+        "src/paper_tool_contracts.py",
+        "src/pipeline_runner.py"
+      ],
+      "purpose": "Release-hygiene wording updates: neutralize private-fork and platform-specific strings in user-facing text; no algorithmic change."
+    }
+  ]
+}
