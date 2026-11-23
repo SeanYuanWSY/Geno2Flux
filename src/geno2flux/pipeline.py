@@ -1013,6 +1013,20 @@ def _run_pipeline_inner(
                 value = res(key)
                 if value is not None:
                     cmd += [flag, str(value)]
+            if cfg.get("esm_token_budget") is not None:
+                raw_budget = cfg["esm_token_budget"]
+                if isinstance(raw_budget, bool) or not isinstance(raw_budget, int) or raw_budget <= 0:
+                    raise PipelineError(
+                        f"esm_token_budget must be a positive integer, got {raw_budget!r}"
+                    )
+                cmd += ["--esm-token-budget", str(raw_budget)]
+            blast_threads = cfg.get("blast_threads")
+            if blast_threads is not None:
+                if isinstance(blast_threads, bool) or not isinstance(blast_threads, int) or blast_threads <= 0:
+                    raise PipelineError(
+                        f"blast_threads must be a positive integer, got {blast_threads!r}"
+                    )
+                cmd += ["--blast-threads", str(blast_threads)]
             if alphagem_mode == "structure_alignment":
                 for flag, key in (
                     ("--prottrans-model-path", "prottrans_model_path"),

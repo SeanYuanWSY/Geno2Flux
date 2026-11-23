@@ -44,15 +44,15 @@ def _make_tar_gz(dest: Path, entries: dict[str, bytes]) -> str:
 
 
 _EGGNOG_STATIC_NAMES = (
-    "eggnog_mapper_default.tax.db",
-    "eggnog_mapper_default.tax.db.md5",
-    "eggnog_mapper_default.tax.db.pkl",
-    "eggnog_mapper_default.tax.db.pkl.md5",
-    "eggnog_mapper_default.tax.db.tar.gz",
-    "eggnog_mapper_default.tax.db.tar.gz.md5",
-    "genepred_linkage.sqlite",
-    "og2level.tsv",
-    "eggnog4.functional_categories.txt",
+    ".gitkeep",
+    "bacteria.dmnd",
+    "e5.proteomes.faa",
+    "eggnog.taxa.db",
+    "eggnog.taxa.db.traverse.pkl",
+    "eggnog_proteins.dmnd",
+    "mammalia.dmnd",
+    "wget-log",
+    "yeast.dmnd",
 )
 
 
@@ -498,7 +498,7 @@ def test_preflight_check_blocks_alphagem_on_uv_python_and_passes_with_alphagem_e
     # (ii) unexpected extra files inside the bundle -> BLOCKED
     rt_extra = build_contract_runtime("rt_extra_files", write_static=True)
     extra_dir = rt_extra / "tools" / "eggnog_mapper" / "data"
-    (extra_dir / "e5.proteomes.faa").write_bytes(b"stray")
+    (extra_dir / "e5.taxid_info.tsv").write_bytes(b"stray")
     (extra_dir / "unexpected.dat").write_bytes(b"unexpected")
     rc, payload = run_check(rt_extra)
     assert rc == 2
@@ -1152,7 +1152,7 @@ def test_fungi_dmnd_contract_mismatch_blocks_fetch_and_check_env(
 
     # A stray intermediate file inside tools/eggnog_mapper/data/ must block check-env
     # (AlphaGEM --profile paper validates eggnog_static_data file_count/bytes/sha256)
-    stray = eggnog_data / "e5.proteomes.faa"
+    stray = eggnog_data / "e5.taxid_info.tsv"
     stray.write_bytes(b"stray")
     (eggnog_data / "unexpected.dat").write_bytes(b"unexpected")
     rc_stray = fetcher.main(check_argv)
@@ -1161,7 +1161,7 @@ def test_fungi_dmnd_contract_mismatch_blocks_fetch_and_check_env(
     ag_stray = check_stray["checks"]["alphagem"]
     assert ag_stray["status"] == "BLOCKED"
     assert any(
-        m["path"] == "tools/eggnog_mapper/data/e5.proteomes.faa"
+        m["path"] == "tools/eggnog_mapper/data/e5.taxid_info.tsv"
         for m in ag_stray["contract_mismatches"]
     )
     # The aggregate eggnog_static_data bundle contract must also flag extras
@@ -1173,7 +1173,7 @@ def test_fungi_dmnd_contract_mismatch_blocks_fetch_and_check_env(
     # Human-readable summary rendering must handle stray + bundle entries
     fetcher.print_check_summary(check_stray)
     rendered = capsys.readouterr().out
-    assert "tools/eggnog_mapper/data/e5.proteomes.faa" in rendered
+    assert "tools/eggnog_mapper/data/e5.taxid_info.tsv" in rendered
     stray.unlink()
     (eggnog_data / "unexpected.dat").unlink()
 

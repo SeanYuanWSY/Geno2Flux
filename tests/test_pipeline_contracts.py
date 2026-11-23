@@ -870,3 +870,72 @@ def test_example_config_supports_exploratory_unverified_reuse(tmp_path):
             allow_unverified=cfg["allow_unverified_reuse"],
         )
     assert "malformed expected" not in str(exc.value)
+
+
+def test_fresh_alphagem_forwards_optional_esm_budget_and_blast_threads(tmp_path):
+    rt = _fake_runtime(tmp_path)
+    cfg = _write(
+        tmp_path,
+        proteome_sha=True,
+        runtime_root=str(rt),
+        extra={"esm_token_budget": 1024, "blast_threads": 12},
+    )
+    raw = json.loads(cfg.read_text())
+    raw.pop("withgaps_model", None)
+    cfg.write_text(json.dumps(raw))
+    out = tmp_path / "out_flags"
+    calls = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        name = cmd[cmd.index("--name") + 1]
+        yml = Path(kwargs["cwd"]) / "working" / name / f"{name}-GEM_withgaps.yml"
+        yml.parent.mkdir(parents=True, exist_ok=True)
+        model, _ = _tiny_model_pair()
+        import cobra
+        cobra.io.save_yaml_model(model, str(yml))
+        return MagicMock(returncode=0)
+
+    with ExitStack() as stack:
+        for p in _light_stubs():
+            stack.enter_context(p)
+        stack.enter_context(
+            patch.object(pipeline.subprocess, "run", side_effect=fake_run)
+        )
+        with pytest.raises(ExternalBoundaryStop, match="step5"):
+            pipeline.run_pipeline(
+                cfg, out, localization_order_override="pre-gapfill"
+            )
+
+    assert calls
+    cmd0 = calls[0]
+    assert "--esm-token-budget" in cmd0
+    assert cmd0[cmd0.index("--esm-token-budget") + 1] == "1024"
+    assert "--blast-threads" in cmd0
+    assert cmd0[cmd0.index("--blast-threads") + 1] == "12"
+
+
+@pytest.mark.parametrize("key,bad_val", [
+    ("esm_token_budget", 0),
+    ("esm_token_budget", True),
+    ("blast_threads", 0),
+    ("blast_threads", False),
+])
+def test_fresh_alphagem_rejects_non_positive_tuning_flags(tmp_path, key, bad_val):
+    rt = _fake_runtime(tmp_path)
+    cfg = _write(
+        tmp_path,
+        proteome_sha=True,
+        runtime_root=str(rt),
+        extra={key: bad_val},
+    )
+    raw = json.loads(cfg.read_text())
+    raw.pop("withgaps_model", None)
+    cfg.write_text(json.dumps(raw))
+    with ExitStack() as stack:
+        for p in _light_stubs():
+            stack.enter_context(p)
+        with pytest.raises(pipeline.PipelineError, match=f"{key} must be a positive integer"):
+            pipeline.run_pipeline(
+                cfg, tmp_path / f"out_bad_{key}_{bad_val}", localization_order_override="pre-gapfill"
+            )

@@ -1719,7 +1719,6 @@ def _check_alphagem(report: dict, ctx: Context) -> None:
                     }
                 )
         for stray_name in (
-            "e5.proteomes.faa",
             "e5.taxid_info.tsv",
             "e5.proteomes.fungi.faa",
         ):
